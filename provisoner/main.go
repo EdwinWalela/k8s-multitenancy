@@ -1,25 +1,49 @@
 package main
 
 import (
-	"flag"
+	"fmt"
 	"log"
 	"os/exec"
+
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	nsPtr := flag.String("ns", "default", "namespace")
-	portPtr := flag.String("port", "0", "port")
-	flag.Parse()
+func deployCluster(ns string, port string) error {
+	log.Printf("Deploying resources to [%s] namespace", ns)
 
-	if *nsPtr == "default" || *portPtr == "0" {
-		panic("namespace/port not provided")
-	}
-
-	log.Printf("Deploying resources to [%s] namespace", *nsPtr)
-
-	res := exec.Command("/bin/sh", "./apply.sh", *nsPtr, *portPtr)
+	res := exec.Command("/bin/sh", "./apply.sh", ns, port)
 
 	if err := res.Start(); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
+}
+
+func main() {
+
+	r := gin.Default()
+
+	r.POST("/", func(c *gin.Context) {
+		ns := c.PostForm("ns")
+		port := c.PostForm("port")
+
+		err := deployCluster(ns, port)
+
+		if err != nil {
+			c.JSON(501, gin.H{
+				"msg":   "failed",
+				"error": err.Error(),
+			})
+		} else {
+			c.JSON(201, gin.H{
+				"msg":  "cluster deployed",
+				"port": port,
+			})
+		}
+
+	})
+
+	r.Run(fmt.Sprintf(":%d", 7000))
+
 }
