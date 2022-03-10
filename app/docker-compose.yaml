@@ -5,7 +5,7 @@ services:
     build: .
     restart: always
     ports:
-      - '7000:7000'
+      - '3000:3000'
     working_dir: /user/src/app
     volumes:
       - .:/user/src/app

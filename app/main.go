@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type User struct {
+type Client struct {
 	gorm.Model
 	Email string
 	Name  string
@@ -26,19 +26,36 @@ func main() {
 		panic("failed to connect to db")
 	}
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Client{})
 
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
+		var clients []Client
+
+		db.Find(&clients)
+
 		c.JSON(200, gin.H{
-			"msg": "hello",
+			"clients": clients,
 		})
 	})
 
 	r.POST("/", func(c *gin.Context) {
 		email := c.PostForm("email")
 		name := c.PostForm("name")
+
+		client := &Client{
+			Name:  name,
+			Email: email,
+		}
+
+		if res := db.Create(&client); res.Error != nil {
+			c.JSON(501, gin.H{
+				"msg": "failed",
+				"err": res.Error,
+			})
+			return
+		}
 
 		c.JSON(201, gin.H{
 			"msg":   "created",
