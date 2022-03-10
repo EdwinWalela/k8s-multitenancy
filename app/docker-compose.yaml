@@ -11,7 +11,7 @@ services:
       - .:/user/src/app
     environment:
       PORT: 3000
-      DB_URI: "mysql"
+      DB_URI: "root:root@tcp(mysql:3306)/saas?parseTime=true"
     depends_on:
       - mysql
   mysql:
@@ -22,6 +22,6 @@ services:
     volumes:
       - ~/apps/mysql:/var/lib/mysql 
     environment:
-      - MYSQL_DATABASE=asante
+      - MYSQL_DATABASE=saas
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
