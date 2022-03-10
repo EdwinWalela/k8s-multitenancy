@@ -1,8 +1,33 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"os"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+type User struct {
+	gorm.Model
+	Email string
+	Name  string
+}
 
 func main() {
+
+	dbUri := os.Getenv("DB_URI")
+	port := os.Getenv("PORT")
+
+	db, err := gorm.Open(mysql.Open(dbUri), &gorm.Config{})
+
+	if err != nil {
+		panic("failed to connect to db")
+	}
+
+	db.AutoMigrate(&User{})
+
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
@@ -22,5 +47,5 @@ func main() {
 		})
 	})
 
-	r.Run(":3000")
+	r.Run(fmt.Sprintf(":%s", port))
 }
