@@ -1,0 +1,1 @@
+helm install $1 ../helm/saas/ --create-namespace -n $1 --set nodeport=$3
