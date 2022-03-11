@@ -35,7 +35,7 @@ Provisioner runs on `localhost:7000`
 
 ## Creating tenants using Provisioner API
 
-### /POST
+### / POST
 
 request body:
 
