@@ -46,8 +46,8 @@ port - Nodeport for service  (30000-32768)
 
 ```json
 {
-    ns: "namespace"
-    port: "30000"
+    "ns": "namespace"
+    "port": "30000"
 }
 ```
 
