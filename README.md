@@ -1,7 +1,7 @@
 # Multi-tenancy on Kubernetes
 Automatic deployment of tenant applications to k8s separated by namespaces
 
-## Structure
+## Project Structure
 
 ### App
 Tenant application
