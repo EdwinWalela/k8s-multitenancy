@@ -1,4 +1,29 @@
 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: {{ .Values.namespace }}
+  labels:
+    name: ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+        - backend: 
+            service:
+                  name: clients
+                  port: 
+                    number: 3000
+          pathType: Prefix
+          path: {{ .Values.path }}
+            
+
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -93,11 +118,9 @@ metadata:
   name: clients
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
   selector:
     app: clients
   ports:
   - port: 3000
     targetPort: 3000
-    nodePort: {{ .Values.nodeport}}
 ---
