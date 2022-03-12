@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func deployCluster(ns string, port string) error {
-	log.Printf("Deploying resources to [%s] namespace", ns)
+func deployCluster(tenantName string) error {
+	log.Printf("Deploying application to /%s", tenantName)
 
-	res := exec.Command("/bin/sh", "./apply.sh", ns, port)
+	res := exec.Command("/bin/sh", "./apply.sh", tenantName, "/"+tenantName)
 
 	if err := res.Start(); err != nil {
 		return err
@@ -25,10 +25,9 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/", func(c *gin.Context) {
-		ns := c.PostForm("ns")
-		port := c.PostForm("port")
+		tenantName := c.PostForm("tenant")
 
-		err := deployCluster(ns, port)
+		err := deployCluster(tenantName)
 
 		if err != nil {
 			c.JSON(501, gin.H{
@@ -37,8 +36,8 @@ func main() {
 			})
 		} else {
 			c.JSON(201, gin.H{
-				"msg":  "cluster deployed",
-				"port": port,
+				"msg": "Application deployed",
+				"url": "https://crafted.co.ke/" + tenantName,
 			})
 		}
 
