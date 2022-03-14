@@ -12,18 +12,15 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: app2.crafted.com
-      http:
+    - http:
         paths:
         - backend: 
             service:
-                  name: clients
+                  name: my-app
                   port: 
                     number: 3000
           pathType: Prefix
-          path: "/"
-            
-
+          path: {{ .Values.path }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
