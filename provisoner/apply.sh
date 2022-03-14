@@ -1,1 +1,1 @@
-helm install $1 ../helm/saas/ --create-namespace -n $1 --set path=$2
+helm install $1 ../helm/saas/ --create-namespace -n $1 --set path=$2 --set storage=$3 --set replicas=$4
