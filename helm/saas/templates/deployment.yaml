@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv
+  name: {{ .Values.namespace }}
   labels:
     type: local
 spec:
