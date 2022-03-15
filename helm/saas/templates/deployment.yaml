@@ -16,7 +16,7 @@ spec:
         paths:
         - backend: 
             service:
-                  name: my-app
+                  name: clients
                   port: 
                     number: 3000
           pathType: Prefix
