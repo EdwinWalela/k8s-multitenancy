@@ -23,6 +23,22 @@ spec:
           path: {{ .Values.path }}
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: client
@@ -31,7 +47,7 @@ spec:
   storageClassName: standard
   resources:
     requests:
-      storage: {{ .Values.storage }}
+      storage: 100Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
